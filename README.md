@@ -48,4 +48,4 @@ suntrack/
 
 ## Development
 
-This project was developed solely by Ibrahim Talha Sülün.
+This project was developed by Ibrahim Talha Sülün.
