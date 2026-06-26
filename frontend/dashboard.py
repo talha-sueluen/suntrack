@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
+from backend.logger import setup_logging
 from datetime import datetime
 from backend.fetcher import fetch_pv_data
 from backend.cleaner import clean_pv_data
@@ -9,6 +10,7 @@ from backend.calculator import calculate_daily, calculate_monthly, calculate_yea
 
 
 def main():
+    setup_logging()
     st.title("☀️ Suntrack — PV Dashboard")
 
     init_storage()
