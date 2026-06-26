@@ -14,6 +14,7 @@ from backend.calculator import calculate_daily, calculate_monthly, calculate_yea
 
 
 def main():
+    """Runs the Suntrack PV monitoring dashboard."""
     setup_logging()
     st.title("☀️ Suntrack — PV Dashboard")
 
