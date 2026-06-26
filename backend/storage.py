@@ -39,3 +39,26 @@ def get_readings_for_day(date: datetime) -> list:
     except Exception as e:
         logging.error(f"Failed to get readings: {e}")
         return []
+
+def get_readings_for_month(year: int, month: int) -> list:
+    """Returns all readings for a given month."""
+    try:
+        month_str = f"{year}-{month:02d}"
+        with open(CSV_PATH, "r") as f:
+            reader = csv.DictReader(f)
+            return [row for row in reader if row["timestamp"].startswith(month_str)]
+    except Exception as e:
+        logging.error(f"Failed to get readings: {e}")
+        return []
+
+
+def get_readings_for_year(year: int) -> list:
+    """Returns all readings for a given year."""
+    try:
+        year_str = str(year)
+        with open(CSV_PATH, "r") as f:
+            reader = csv.DictReader(f)
+            return [row for row in reader if row["timestamp"].startswith(year_str)]
+    except Exception as e:
+        logging.error(f"Failed to get readings: {e}")
+        return []
