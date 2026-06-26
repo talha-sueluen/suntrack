@@ -19,3 +19,42 @@ def calculate_daily(date: datetime) -> dict:
         "total_consumption_w": total_consumption,
         "pv_ratio_percent": round(pv_ratio, 2),
     }
+
+def calculate_monthly(year: int, month: int) -> dict:
+    """Calculates monthly generation and consumption totals."""
+    from backend.storage import get_readings_for_month
+    readings = get_readings_for_month(year, month)
+    if not readings:
+        logging.warning("No readings found for the given month")
+        return {}
+
+    total_generation = sum(float(r["generation_w"]) for r in readings)
+    total_consumption = sum(float(r["consumption_w"]) for r in readings)
+    pv_ratio = (total_generation / total_consumption * 100) if total_consumption > 0 else 0.0
+
+    return {
+        "month": f"{year}-{month:02d}",
+        "total_generation_w": total_generation,
+        "total_consumption_w": total_consumption,
+        "pv_ratio_percent": round(pv_ratio, 2),
+    }
+
+
+def calculate_yearly(year: int) -> dict:
+    """Calculates yearly generation and consumption totals."""
+    from backend.storage import get_readings_for_year
+    readings = get_readings_for_year(year)
+    if not readings:
+        logging.warning("No readings found for the given year")
+        return {}
+
+    total_generation = sum(float(r["generation_w"]) for r in readings)
+    total_consumption = sum(float(r["consumption_w"]) for r in readings)
+    pv_ratio = (total_generation / total_consumption * 100) if total_consumption > 0 else 0.0
+
+    return {
+        "year": str(year),
+        "total_generation_w": total_generation,
+        "total_consumption_w": total_consumption,
+        "pv_ratio_percent": round(pv_ratio, 2),
+    }
