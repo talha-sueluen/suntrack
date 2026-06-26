@@ -5,7 +5,11 @@ from backend.logger import setup_logging
 from datetime import datetime
 from backend.fetcher import fetch_pv_data
 from backend.cleaner import clean_pv_data
-from backend.storage import init_storage, save_reading, get_readings_for_day, get_readings_for_month, get_readings_for_year
+from backend.storage import (
+    init_storage,
+    save_reading,
+    get_readings_for_day,
+)
 from backend.calculator import calculate_daily, calculate_monthly, calculate_yearly
 
 

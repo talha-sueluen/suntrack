@@ -2,16 +2,21 @@ import logging
 from datetime import datetime
 from backend.storage import get_readings_for_day
 
+
 def calculate_daily(date: datetime) -> dict:
     """Calculates daily generation and consumption totals."""
     readings = get_readings_for_day(date)
     if not readings:
-        logging.warning("No readings found for the given day") # something is missing but code continues to work
+        logging.warning(
+            "No readings found for the given day"
+        )  # something is missing but code continues to work
         return {}
 
     total_generation = sum(float(r["generation_w"]) for r in readings)
     total_consumption = sum(float(r["consumption_w"]) for r in readings)
-    pv_ratio = (total_generation / total_consumption * 100) if total_consumption > 0 else 0.0
+    pv_ratio = (
+        (total_generation / total_consumption * 100) if total_consumption > 0 else 0.0
+    )
 
     return {
         "date": date.strftime("%Y-%m-%d"),
@@ -20,9 +25,11 @@ def calculate_daily(date: datetime) -> dict:
         "pv_ratio_percent": round(pv_ratio, 2),
     }
 
+
 def calculate_monthly(year: int, month: int) -> dict:
     """Calculates monthly generation and consumption totals."""
     from backend.storage import get_readings_for_month
+
     readings = get_readings_for_month(year, month)
     if not readings:
         logging.warning("No readings found for the given month")
@@ -30,7 +37,9 @@ def calculate_monthly(year: int, month: int) -> dict:
 
     total_generation = sum(float(r["generation_w"]) for r in readings)
     total_consumption = sum(float(r["consumption_w"]) for r in readings)
-    pv_ratio = (total_generation / total_consumption * 100) if total_consumption > 0 else 0.0
+    pv_ratio = (
+        (total_generation / total_consumption * 100) if total_consumption > 0 else 0.0
+    )
 
     return {
         "month": f"{year}-{month:02d}",
@@ -43,6 +52,7 @@ def calculate_monthly(year: int, month: int) -> dict:
 def calculate_yearly(year: int) -> dict:
     """Calculates yearly generation and consumption totals."""
     from backend.storage import get_readings_for_year
+
     readings = get_readings_for_year(year)
     if not readings:
         logging.warning("No readings found for the given year")
@@ -50,7 +60,9 @@ def calculate_yearly(year: int) -> dict:
 
     total_generation = sum(float(r["generation_w"]) for r in readings)
     total_consumption = sum(float(r["consumption_w"]) for r in readings)
-    pv_ratio = (total_generation / total_consumption * 100) if total_consumption > 0 else 0.0
+    pv_ratio = (
+        (total_generation / total_consumption * 100) if total_consumption > 0 else 0.0
+    )
 
     return {
         "year": str(year),
