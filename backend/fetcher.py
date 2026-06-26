@@ -2,7 +2,9 @@ import requests
 from dotenv import load_dotenv
 import logging
 import os
+
 load_dotenv()
+
 
 def fetch_pv_data() -> dict:
     """Fetches real-time PV data from API endpoint."""
