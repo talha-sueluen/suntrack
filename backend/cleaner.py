@@ -13,7 +13,7 @@ def clean_pv_data(raw_data: dict) -> dict:
 
     for item in raw_data["data"]:
         if item["type"] == "generation":
-            generation_w += item["value"]
+            generation_w += max(0, item["value"])
         elif item["type"] == "consumption":
             consumption_w += item["value"]
 

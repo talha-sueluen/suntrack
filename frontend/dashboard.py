@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import time
 import plotly.graph_objects as go
 from backend.logger import setup_logging
 from datetime import datetime
@@ -16,6 +17,7 @@ from backend.calculator import calculate_daily, calculate_monthly, calculate_yea
 def main():
     """Runs the Suntrack PV monitoring dashboard."""
     setup_logging()
+    st.cache_data.clear()
     st.title("☀️ Suntrack — PV Dashboard")
 
     init_storage()
@@ -24,15 +26,18 @@ def main():
     raw = fetch_pv_data()
     data = clean_pv_data(raw)
     if data:
+        data["timestamp"] = datetime.now()
         save_reading(data)
 
     # Momentanwerte
+    st.divider()
     st.header("⚡ Momentanwerte")
     col1, col2 = st.columns(2)
     col1.metric("Erzeugung (W)", round(data.get("generation_w", 0), 2))
     col2.metric("Verbrauch (W)", round(data.get("consumption_w", 0), 2))
 
     # Tageswerte
+    st.divider()
     st.header("📅 Tageswerte")
     today = datetime.now()
     daily = calculate_daily(today)
@@ -43,6 +48,7 @@ def main():
         col3.metric("PV-Anteil (%)", daily["pv_ratio_percent"])
 
     # Monatswerte
+    st.divider()
     st.header("📆 Monatswerte")
     monthly = calculate_monthly(today.year, today.month)
     if monthly:
@@ -52,6 +58,7 @@ def main():
         col3.metric("PV-Anteil (%)", monthly["pv_ratio_percent"])
 
     # Jahreswerte
+    st.divider()
     st.header("📊 Jahreswerte")
     yearly = calculate_yearly(today.year)
     if yearly:
@@ -61,6 +68,7 @@ def main():
         col3.metric("PV-Anteil (%)", yearly["pv_ratio_percent"])
 
     # Zeitverlauf
+    st.divider()
     st.header("📈 Zeitverlauf")
     readings = get_readings_for_day(today)
     if readings:
@@ -71,6 +79,7 @@ def main():
         st.line_chart(df.set_index("timestamp")[["generation_w", "consumption_w"]])
 
     # Tortendiagramme
+    st.divider()
     st.header("🥧 PV-Anteil")
     col1, col2, col3 = st.columns(3)
 
@@ -79,21 +88,24 @@ def main():
         rest = round(100 - pv, 2)
         fig = go.Figure(go.Pie(labels=["PV", "Netz"], values=[pv, rest]))
         fig.update_layout(title="Tag")
-        col1.plotly_chart(fig, use_container_width=True)
+        col1.plotly_chart(fig, width='stretch')
 
     if monthly:
         pv = monthly["pv_ratio_percent"]
         rest = round(100 - pv, 2)
         fig = go.Figure(go.Pie(labels=["PV", "Netz"], values=[pv, rest]))
         fig.update_layout(title="Monat")
-        col2.plotly_chart(fig, use_container_width=True)
+        col2.plotly_chart(fig, width='stretch')
 
     if yearly:
         pv = yearly["pv_ratio_percent"]
         rest = round(100 - pv, 2)
         fig = go.Figure(go.Pie(labels=["PV", "Netz"], values=[pv, rest]))
         fig.update_layout(title="Jahr")
-        col3.plotly_chart(fig, use_container_width=True)
+        col3.plotly_chart(fig, width='stretch')
+
+    time.sleep(30)  # wait for 30 seconds
+    st.rerun()
 
 
 if __name__ == "__main__":
