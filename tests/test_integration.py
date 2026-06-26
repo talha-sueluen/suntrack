@@ -14,10 +14,14 @@ TEST_CSV = "test_integration.csv"
 class TestIntegration(unittest.TestCase):
 
     def setUp(self):
+        os.environ["PV_API_KEY"] = "test-key"
+        os.environ["PV_API_URL"] = "https://test.url"
         storage.CSV_PATH = TEST_CSV
         init_storage()
 
     def tearDown(self):
+        os.environ.pop("PV_API_KEY", None)
+        os.environ.pop("PV_API_URL", None)
         if os.path.exists(TEST_CSV):
             os.remove(TEST_CSV)
 
