@@ -22,15 +22,19 @@ def save_reading(data: dict):
         logging.error("No data to save")
         return
     try:
-        with open(CSV_PATH, "a", newline="") as f:  # a = append mode
+        timestamp = data["timestamp"].isoformat()
+        existing = get_readings_for_day(data["timestamp"])
+        for row in existing:
+            if row["timestamp"] == timestamp:
+                logging.info("Reading already saved, skipping.")
+                return
+        with open(CSV_PATH, "a", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(
-                [
-                    data["timestamp"].isoformat(),
-                    data["generation_w"],
-                    data["consumption_w"],
-                ]
-            )
+            writer.writerow([
+                timestamp,
+                data["generation_w"],
+                data["consumption_w"],
+            ])
     except Exception as e:
         logging.error(f"Failed to save reading: {e}")
 
