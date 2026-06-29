@@ -17,9 +17,10 @@ A real-time PV monitoring dashboard built with Python and Streamlit.
 
 3. Create a `.env` file in the root directory:
 ```bash
-PV_API_KEY=your_api_key_here
+PV_API_KEY=<provided by course instructor>
 PV_API_URL=https://jupyterhub-wi.rz.fh-ingolstadt.de:8443/data
 ```
+> ⚠️ API is only accessible on the THI campus network (Eduroam) or VPN.
 
 ## Usage
 
