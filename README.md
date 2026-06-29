@@ -28,8 +28,6 @@ PV_API_URL=https://jupyterhub-wi.rz.fh-ingolstadt.de:8443/data
 python -m streamlit run frontend/dashboard.py
 ```
 
-> ⚠️ API is only accessible on the THI campus network (Eduroam) or VPN.
-
 ## Project Structure
 ```
 suntrack/
